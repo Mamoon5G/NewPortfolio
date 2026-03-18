@@ -1,160 +1,289 @@
-import { useState } from "react";
-import { Mail, Linkedin, Github, Send } from "lucide-react";
+import { memo, useState, useCallback } from "react";
+import { Mail, Linkedin, Github, Send, MessageCircle, MapPin, Clock } from "lucide-react";
 import { Button } from "@/components/Button";
+import { motion } from "framer-motion";
 
-export const Contact = () => {
+const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+        opacity: 1,
+        transition: { staggerChildren: 0.1, delayChildren: 0.2 }
+    }
+}
+
+const itemVariants = {
+    hidden: { opacity: 0, y: 40 },
+    visible: { 
+        opacity: 1, 
+        y: 0, 
+        transition: { duration: 0.7, ease: [0.4, 0, 0.2, 1] } 
+    }
+}
+
+const contactInfo = [
+    {
+        icon: Mail,
+        label: "Email",
+        value: "siddiquimamoon2004ms@gmail.com",
+        href: "mailto:siddiquimamoon2004ms@gmail.com",
+        color: "#00d4ff",
+    },
+    {
+        icon: Linkedin,
+        label: "LinkedIn",
+        value: "Mamoon Siddiqui",
+        href: "https://www.linkedin.com/in/mamoon-siddiqui-5g",
+        color: "#0077b5",
+    },
+    {
+        icon: Github,
+        label: "GitHub",
+        value: "mamoon-5g",
+        href: "https://github.com/mamoon-5g",
+        color: "#8b5cf6",
+    },
+    {
+        icon: MapPin,
+        label: "Location",
+        value: "Mumbai, India",
+        href: null,
+        color: "#ec4899",
+    },
+    {
+        icon: Clock,
+        label: "Availability",
+        value: "Open to Opportunities",
+        href: null,
+        color: "#10b981",
+    },
+]
+
+export const Contact = memo(() => {
     const [formData, setFormData] = useState({
         name: '',
         email: '',
         message: ''
     });
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [focusedField, setFocusedField] = useState(null);
 
-    const handleChange = (e) => {
-        setFormData({
-            ...formData,
+    const handleChange = useCallback((e) => {
+        setFormData(prev => ({
+            ...prev,
             [e.target.name]: e.target.value
-        });
-    };
+        }));
+    }, []);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = useCallback(async (e) => {
         e.preventDefault();
-        // Handle form submission here
-        console.log('Form submitted:', formData);
-        // Reset form
+        setIsSubmitting(true);
+        
+        await new Promise(resolve => setTimeout(resolve, 1500));
+        
+        const mailtoLink = `mailto:siddiquimamoon2004ms@gmail.com?subject=Portfolio Contact: ${formData.name}&body=${encodeURIComponent(`Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`)}`;
+        window.open(mailtoLink, '_blank');
+        
         setFormData({ name: '', email: '', message: '' });
-        alert('Thank you for your message! I will get back to you soon.');
-    };
+        setIsSubmitting(false);
+    }, [formData]);
 
     return (
         <section id="contact" className="py-32 relative overflow-hidden">
-            <div className="absolute top-1/2 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl -translate-y-0.5" />
             <div className="container mx-auto px-6 relative z-10">
-                {/* Section Header */}
-                <div className="text-center mb-16 mx-auto max-w-3xl">
-                    <span className="text-secondary-foreground text-sm font-medium tracking-wider uppercase animate-fade-in-up">Get in Touch</span>
-                    <h2 className="text-4xl md:text-5xl font-bold text-secondary-foreground mt-4 mb-4 animate-fade-in-up delay-200">Contact that
-                        <span className="font-serif italic font-normal text-foreground"> Connects</span>
-                    </h2>
-                    <p className="text-muted-foreground animate-fade-in-up delay-300">
+                <motion.div
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, margin: "-100px" }}
+                    variants={containerVariants}
+                    className="text-center mb-20 mx-auto max-w-3xl"
+                >
+                    <motion.span variants={itemVariants} className="inline-flex items-center gap-2 px-4 py-2 rounded-full glass text-sm font-medium text-primary mb-6">
+                        <MessageCircle className="w-4 h-4" />
+                        Get in Touch
+                    </motion.span>
+                    <motion.h2 variants={itemVariants} className="text-4xl md:text-5xl lg:text-6xl font-bold text-secondary-foreground mb-6">
+                        Contact that
+                        <span className="font-serif italic font-normal"> Connects</span>
+                    </motion.h2>
+                    <motion.p variants={itemVariants} className="text-muted-foreground text-lg">
                         I'm always open to discussing new projects, creative ideas, or opportunities to be part of your visions. Feel free to reach out!
-                    </p>
-                </div>
+                    </motion.p>
+                </motion.div>
                 
-                <div className="grid md:grid-cols-2 gap-12 max-w-6xl mx-auto">
-                    {/* Contact Form */}
-                    <div className="animate-fade-in-left delay-400">
+                <motion.div
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, margin: "-50px" }}
+                    variants={containerVariants}
+                    className="grid lg:grid-cols-2 gap-12 lg:gap-16 max-w-6xl mx-auto"
+                >
+                    <motion.div variants={itemVariants}>
                         <form onSubmit={handleSubmit} className="space-y-6">
-                            <div>
-                                <label htmlFor="name" className="block text-sm font-medium text-muted-foreground mb-2">
+                            <div className="space-y-2">
+                                <label htmlFor="name" className="block text-sm font-medium text-foreground">
                                     Name
                                 </label>
-                                <input
-                                    type="text"
-                                    id="name"
-                                    name="name"
-                                    value={formData.name}
-                                    onChange={handleChange}
-                                    required
-                                    className="w-full px-4 py-3 glass rounded-lg border border-border focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-300 bg-surface/50 text-foreground"
-                                    placeholder="Your name"
-                                />
+                                <motion.div
+                                    animate={{
+                                        boxShadow: focusedField === 'name' ? "0 0 0 2px rgba(0, 212, 255, 0.3)" : "0 0 0 0 transparent"
+                                    }}
+                                    transition={{ duration: 0.2 }}
+                                >
+                                    <input
+                                        type="text"
+                                        id="name"
+                                        name="name"
+                                        value={formData.name}
+                                        onChange={handleChange}
+                                        onFocus={() => setFocusedField('name')}
+                                        onBlur={() => setFocusedField(null)}
+                                        required
+                                        className="w-full px-4 py-3.5 glass rounded-xl border border-border focus:border-primary focus:outline-none transition-all duration-300 bg-surface/30 text-foreground placeholder:text-muted-foreground/50"
+                                        placeholder="Your name"
+                                    />
+                                </motion.div>
                             </div>
-                            <div>
-                                <label htmlFor="email" className="block text-sm font-medium text-muted-foreground mb-2">
+                            
+                            <div className="space-y-2">
+                                <label htmlFor="email" className="block text-sm font-medium text-foreground">
                                     Email
                                 </label>
-                                <input
-                                    type="email"
-                                    id="email"
-                                    name="email"
-                                    value={formData.email}
-                                    onChange={handleChange}
-                                    required
-                                    className="w-full px-4 py-3 glass rounded-lg border border-border focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-300 bg-surface/50 text-foreground"
-                                    placeholder="your.email@example.com"
-                                />
+                                <motion.div
+                                    animate={{
+                                        boxShadow: focusedField === 'email' ? "0 0 0 2px rgba(0, 212, 255, 0.3)" : "0 0 0 0 transparent"
+                                    }}
+                                    transition={{ duration: 0.2 }}
+                                >
+                                    <input
+                                        type="email"
+                                        id="email"
+                                        name="email"
+                                        value={formData.email}
+                                        onChange={handleChange}
+                                        onFocus={() => setFocusedField('email')}
+                                        onBlur={() => setFocusedField(null)}
+                                        required
+                                        className="w-full px-4 py-3.5 glass rounded-xl border border-border focus:border-primary focus:outline-none transition-all duration-300 bg-surface/30 text-foreground placeholder:text-muted-foreground/50"
+                                        placeholder="your.email@example.com"
+                                    />
+                                </motion.div>
                             </div>
-                            <div>
-                                <label htmlFor="message" className="block text-sm font-medium text-muted-foreground mb-2">
+                            
+                            <div className="space-y-2">
+                                <label htmlFor="message" className="block text-sm font-medium text-foreground">
                                     Message
                                 </label>
-                                <textarea
-                                    id="message"
-                                    name="message"
-                                    value={formData.message}
-                                    onChange={handleChange}
-                                    required
-                                    rows="6"
-                                    className="w-full px-4 py-3 glass rounded-lg border border-border focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all duration-300 bg-surface/50 text-foreground resize-none"
-                                    placeholder="Your message..."
-                                />
+                                <motion.div
+                                    animate={{
+                                        boxShadow: focusedField === 'message' ? "0 0 0 2px rgba(0, 212, 255, 0.3)" : "0 0 0 0 transparent"
+                                    }}
+                                    transition={{ duration: 0.2 }}
+                                >
+                                    <textarea
+                                        id="message"
+                                        name="message"
+                                        value={formData.message}
+                                        onChange={handleChange}
+                                        onFocus={() => setFocusedField('message')}
+                                        onBlur={() => setFocusedField(null)}
+                                        required
+                                        rows="5"
+                                        className="w-full px-4 py-3.5 glass rounded-xl border border-border focus:border-primary focus:outline-none transition-all duration-300 bg-surface/30 text-foreground placeholder:text-muted-foreground/50 resize-none"
+                                        placeholder="Your message..."
+                                    />
+                                </motion.div>
                             </div>
-                            <button
+                            
+                            <motion.button
                                 type="submit"
-                                className="w-full px-6 py-3 bg-primary text-primary-foreground rounded-full font-medium hover:bg-primary/90 hover:scale-105 shadow-lg shadow-primary/25 transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer group"
+                                disabled={isSubmitting}
+                                className="w-full cosmic-button text-primary-foreground px-6 py-4 rounded-xl font-medium shadow-lg shadow-primary/25 transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer group disabled:opacity-70"
+                                whileHover={{ scale: 1.02 }}
+                                whileTap={{ scale: 0.98 }}
                             >
-                                Send Message
-                                <Send className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                            </button>
+                                {isSubmitting ? (
+                                    <motion.div
+                                        className="w-5 h-5 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full"
+                                        animate={{ rotate: 360 }}
+                                        transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                                    />
+                                ) : (
+                                    <>
+                                        Send Message
+                                        <Send className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                                    </>
+                                )}
+                            </motion.button>
                         </form>
-                    </div>
+                    </motion.div>
 
-                    {/* Contact Info */}
-                    <div className="flex flex-col justify-center space-y-8 animate-fade-in-right delay-500">
+                    <motion.div variants={itemVariants} className="space-y-6 min-w-0">
                         <div>
-                            <h3 className="text-2xl font-bold mb-6">Let's Connect</h3>
-                            <p className="text-muted-foreground mb-8">
+                            <h3 className="text-2xl font-bold mb-4 text-secondary-foreground">Let's Connect</h3>
+                            <p className="text-muted-foreground mb-8 leading-relaxed">
                                 Whether you have a question, want to collaborate, or just want to say hello, feel free to get in touch. I'm always excited to hear about new opportunities!
                             </p>
                         </div>
                         
                         <div className="space-y-4">
-                            <a 
-                                href="mailto:siddiquimamoon2004ms@gmail.com" 
-                                className="flex items-center gap-4 glass p-4 rounded-lg border border-border hover:border-primary/50 hover:scale-105 transition-all duration-300 group"
-                            >
-                                <div className="p-3 bg-primary/10 rounded-full group-hover:bg-primary/20 group-hover:scale-110 transition-all">
-                                    <Mail className="w-5 h-5 text-primary" />
-                                </div>
-                                <div>
-                                    <div className="text-sm text-muted-foreground">Email</div>
-                                    <div className="font-medium">siddiquimamoon2004ms@gmail.com</div>
-                                </div>
-                            </a>
-                            
-                            <a 
-                                href="https://www.linkedin.com/in/mamoon-siddiqui-5g" 
-                                target="_blank" 
-                                rel="noopener noreferrer"
-                                className="flex items-center gap-4 glass p-4 rounded-lg border border-border hover:border-primary/50 hover:scale-105 transition-all duration-300 group"
-                            >
-                                <div className="p-3 bg-primary/10 rounded-full group-hover:bg-primary/20 group-hover:scale-110 transition-all">
-                                    <Linkedin className="w-5 h-5 text-primary" />
-                                </div>
-                                <div>
-                                    <div className="text-sm text-muted-foreground">LinkedIn</div>
-                                    <div className="font-medium">Mamoon Siddiqui</div>
-                                </div>
-                            </a>
-                            
-                            <a 
-                                href="https://github.com/mamoon-5g" 
-                                target="_blank" 
-                                rel="noopener noreferrer"
-                                className="flex items-center gap-4 glass p-4 rounded-lg border border-border hover:border-primary/50 hover:scale-105 transition-all duration-300 group"
-                            >
-                                <div className="p-3 bg-primary/10 rounded-full group-hover:bg-primary/20 group-hover:scale-110 transition-all">
-                                    <Github className="w-5 h-5 text-primary" />
-                                </div>
-                                <div>
-                                    <div className="text-sm text-muted-foreground">GitHub</div>
-                                    <div className="font-medium">mamoon-5g</div>
-                                </div>
-                            </a>
+                            {contactInfo.map((item, index) => (
+                                <motion.a 
+                                    key={index}
+                                    href={item.href || undefined}
+                                    target={item.href ? "_blank" : undefined}
+                                    rel={item.href ? "noopener noreferrer" : undefined}
+                                    className={`flex items-center gap-4 glass-card p-4 group min-w-0 ${!item.href ? 'cursor-default' : ''}`}
+                                    whileHover={item.href ? { scale: 1.02, x: 5 } : {}}
+                                >
+                                    <motion.div 
+                                        className="p-3 rounded-xl"
+                                        style={{ backgroundColor: `${item.color}15` }}
+                                        whileHover={{ scale: 1.1, backgroundColor: `${item.color}25` }}
+                                    >
+                                        <item.icon className="w-5 h-5" style={{ color: item.color }} />
+                                    </motion.div>
+                                    <div className="flex-1 min-w-0">
+                                        <div className="text-sm text-muted-foreground">{item.label}</div>
+                                        <div className="font-medium text-foreground group-hover:text-primary transition-colors">
+                                            {item.value}
+                                        </div>
+                                    </div>
+                                    {item.href && (
+                                        <motion.div
+                                            className="opacity-0 group-hover:opacity-100 transition-opacity"
+                                            animate={{ x: [0, 5, 0] }}
+                                            transition={{ duration: 1.5, repeat: Infinity }}
+                                        >
+                                            <Send className="w-4 h-4 text-primary" />
+                                        </motion.div>
+                                    )}
+                                </motion.a>
+                            ))}
                         </div>
-                    </div>
-                </div>
+
+                        <motion.div
+                            className="glass-card p-6 mt-8 text-center"
+                            whileHover={{ scale: 1.02 }}
+                        >
+                            <div className="text-6xl mb-4">🚀</div>
+                            <p className="text-foreground font-medium mb-2">
+                                Open to Work
+                            </p>
+                            <p className="text-sm text-muted-foreground">
+                                Currently available for internships and entry-level positions
+                            </p>
+                        </motion.div>
+                    </motion.div>
+                </motion.div>
             </div>
+
+            <motion.div
+                className="absolute top-1/2 right-0 w-[600px] h-[600px] bg-primary/5 rounded-full blur-[150px]"
+                animate={{ scale: [1, 1.1, 1], opacity: [0.3, 0.5, 0.3] }}
+                transition={{ duration: 10, repeat: Infinity }}
+            />
         </section>
-    )
-}
+    );
+});
+
+export default Contact;

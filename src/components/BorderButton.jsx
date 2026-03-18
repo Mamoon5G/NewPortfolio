@@ -1,13 +1,26 @@
-import { Download } from "lucide-react"
+import { motion } from "framer-motion";
 
-export const BorderButton = ({ children }) => {
+export const BorderButton = ({ 
+    children, 
+    className = "",
+    size = "default",
+    ...props 
+}) => {
+    const sizeClasses = {
+        sm: "px-5 py-2.5 text-sm",
+        default: "px-6 py-3 text-base",
+        lg: "px-8 py-4 text-lg"
+    };
+
     return (
-        <button
-            className="relative bg-transparent border border-border text-foreground hover:border-primary/50 hover:scale-105 transition-all duration-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed group px-8 py-4 text-lg font-medium rounded-full overflow-visible animated-border cursor-pointer"
+        <motion.button
+            className={`relative bg-transparent border border-border text-foreground hover:border-primary hover:bg-primary/5 transition-all duration-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary cursor-pointer group ${sizeClasses[size]} ${className}`}
+            whileHover={{ scale: 1.02, y: -2 }}
+            whileTap={{ scale: 0.98 }}
+            {...props}
         >
-
             <svg
-                className="absolute left-0 top-0 w-full h-full pointer-events-none download-cv-border"
+                className="absolute left-0 top-0 w-full h-full pointer-events-none"
                 viewBox="0 0 200 60"
                 preserveAspectRatio="none"
                 style={{ overflow: "visible" }}
@@ -24,7 +37,11 @@ export const BorderButton = ({ children }) => {
                     className="border-path"
                 />
             </svg>
-            <span className="relative z-10 flex items-center justify-center gap-2">{children}</span>
-        </button>
+            <span className="relative z-10 flex items-center justify-center gap-2">
+                {children}
+            </span>
+        </motion.button>
     )
-}  
+}
+
+export default BorderButton;
