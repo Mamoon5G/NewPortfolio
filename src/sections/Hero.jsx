@@ -2,7 +2,7 @@ import { memo, useMemo } from "react";
 import { Button } from "@/components/Button"
 import { ArrowRight, ChevronDown, Github, Instagram, Linkedin, Twitter, Download, Code2 } from "lucide-react"
 import { BorderButton } from "@/components/BorderButton"
-import { motion, useScroll, useTransform } from "framer-motion"
+import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion"
 import { useRef } from "react"
 
 const skills = [
@@ -87,6 +87,7 @@ const GlowText = memo(({ children, className }) => (
 ));
 
 export const Hero = memo(() => {
+    const prefersReducedMotion = useReducedMotion();
     const containerRef = useRef(null);
     const { scrollYProgress } = useScroll({
         target: containerRef,
@@ -325,10 +326,10 @@ export const Hero = memo(() => {
                         <div className="absolute right-0 top-0 bottom-0 w-20 bg-linear-to-l from-background to-transparent z-10" />
                         <motion.div
                             className="flex gap-8 py-4"
-                            animate={{ x: [0, -50 + "%"] }}
+                            animate={prefersReducedMotion ? { x: 0 } : { x: [0, -50 + "%"] }}
                             transition={{ 
-                                duration: 25, 
-                                repeat: Infinity, 
+                                duration: prefersReducedMotion ? 0 : 25, 
+                                repeat: prefersReducedMotion ? 0 : Infinity, 
                                 ease: "linear" 
                             }}
                         >

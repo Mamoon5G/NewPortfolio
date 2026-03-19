@@ -8,10 +8,10 @@ const skillCategories = [
         icon: Code,
         color: "#00d4ff",
         skills: [
-            { name: "React / Next.js", level: 90 },
-            { name: "JavaScript / TypeScript", level: 85 },
-            { name: "HTML5 / CSS3", level: 95 },
-            { name: "Tailwind CSS", level: 88 },
+            { name: "React / Next.js", level: 80 },
+            { name: "JavaScript / TypeScript", level: 82 },
+            { name: "HTML5 / CSS3", level: 88 },
+            { name: "Tailwind CSS", level: 80 },
         ]
     },
     {
@@ -19,10 +19,10 @@ const skillCategories = [
         icon: Database,
         color: "#8b5cf6",
         skills: [
-            { name: "Node.js / Express", level: 80 },
-            { name: "MongoDB", level: 78 },
-            { name: "MySQL", level: 75 },
-            { name: "REST APIs", level: 85 },
+            { name: "Node.js / Express", level: 72 },
+            { name: "MongoDB", level: 68 },
+            { name: "MySQL", level: 66 },
+            { name: "REST APIs", level: 78 },
         ]
     },
     {
@@ -30,10 +30,10 @@ const skillCategories = [
         icon: GitBranch,
         color: "#ec4899",
         skills: [
-            { name: "Git / GitHub", level: 88 },
-            { name: "VS Code", level: 92 },
-            { name: "Vite / Webpack", level: 80 },
-            { name: "Chrome DevTools", level: 85 },
+            { name: "Git / GitHub", level: 82 },
+            { name: "VS Code", level: 86 },
+            { name: "Vite / Webpack", level: 78 },
+            { name: "Chrome DevTools", level: 80 },
         ]
     },
 ];

@@ -2,9 +2,8 @@ import { useRef, useMemo, useEffect, memo } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 
-function Particles() {
+function Particles({ count, isLowPower }) {
   const meshRef = useRef(null);
-  const count = 1500; // 🔥 reduced from 3000
 
   const { positions, colors } = useMemo(() => {
     const positions = new Float32Array(count * 3);
@@ -27,7 +26,7 @@ function Particles() {
     }
 
     return { positions, colors };
-  }, []);
+  }, [count]);
 
   useFrame((state) => {
     if (!meshRef.current) return;
@@ -65,7 +64,7 @@ function Particles() {
       </bufferGeometry>
 
       <pointsMaterial
-        size={0.025}
+        size={isLowPower ? 0.02 : 0.025}
         vertexColors
         transparent
         opacity={0.5}
@@ -78,19 +77,19 @@ function Particles() {
 // 🔥 prevent re-renders
 const MemoParticles = memo(Particles);
 
-export const ParticleField = memo(() => {
+export const ParticleField = memo(({ count = 1500, isLowPower = false }) => {
   return (
     <div className="fixed inset-0 -z-10 pointer-events-none">
       <Canvas
         camera={{ position: [0, 0, 5], fov: 75 }}
-        dpr={[1, 1.5]}
+        dpr={isLowPower ? 1 : [1, 1.5]}
         gl={{
           antialias: false,
           alpha: true,
           powerPreference: "high-performance",
         }}
       >
-        <MemoParticles />
+        <MemoParticles count={count} isLowPower={isLowPower} />
         <ambientLight intensity={0.15} />
       </Canvas>
     </div>

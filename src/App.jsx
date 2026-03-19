@@ -13,16 +13,25 @@ import { CustomCursor } from "@/components/CustomCursor";
 import { LoadingScreen } from "@/components/LoadingScreen";
 // import { AnimatedBackground } from "@/components/AnimatedBackground";
 import { lazy, Suspense, useState, useEffect, useCallback, useMemo } from "react";
-import { useMotionValue, useSpring } from "framer-motion";
+import { useMotionValue, useSpring, useReducedMotion } from "framer-motion";
 
 const Hero3D = lazy(() => import("@/components/Hero3D"));
 
 function App() {
+  const prefersReducedMotion = useReducedMotion();
   const [isDark, setIsDark] = useState(() => {
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme) return savedTheme !== 'light';
     return window.matchMedia('(prefers-color-scheme: dark)').matches;
   });
+  const [isMobile, setIsMobile] = useState(() => window.matchMedia('(max-width: 768px)').matches);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.matchMedia('(max-width: 768px)').matches);
+    handleResize();
+    window.addEventListener('resize', handleResize, { passive: true });
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   useEffect(() => {
     if (isDark) {
@@ -65,28 +74,34 @@ function App() {
   const cursorYSpring = useSpring(cursorY, springConfig);
 
   const handleMouseMove = useCallback((e) => {
+    if (prefersReducedMotion || isMobile) return;
     cursorX.set(e.clientX - 16);
     cursorY.set(e.clientY - 16);
-  }, [cursorX, cursorY]);
+  }, [cursorX, cursorY, prefersReducedMotion, isMobile]);
 
   useEffect(() => {
+    if (prefersReducedMotion || isMobile) return undefined;
     window.addEventListener("mousemove", handleMouseMove);
     return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, [handleMouseMove]);
+  }, [handleMouseMove, prefersReducedMotion, isMobile]);
 
   return (
     <div className="min-h-screen overflow-x-hidden">
-      <LoadingScreen />
-      <CustomCursor cursorXSpring={cursorXSpring} cursorYSpring={cursorYSpring} />
+      <LoadingScreen skip={prefersReducedMotion || isMobile} />
+      {!isMobile && !prefersReducedMotion && (
+        <CustomCursor cursorXSpring={cursorXSpring} cursorYSpring={cursorYSpring} />
+      )}
       {/* <AnimatedBackground isDark={isDark} /> */}
-      <ParticleField />
+      <ParticleField count={isMobile ? 900 : 1500} isLowPower={prefersReducedMotion || isMobile} />
       <Navbar />
       <main>
         <div className="relative">
           <Hero />
-          <Suspense fallback={null}>
-            <Hero3D isDark={isDark} />
-          </Suspense>
+          {!isMobile && !prefersReducedMotion && (
+            <Suspense fallback={null}>
+              <Hero3D isDark={isDark} />
+            </Suspense>
+          )}
         </div>
         <About />
         <Skills />

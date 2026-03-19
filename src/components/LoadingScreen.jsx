@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-export const LoadingScreen = () => {
+export const LoadingScreen = ({ skip = false }) => {
+  if (skip) return null;
+
   const [isLoading, setIsLoading] = useState(true);
   const [progress, setProgress] = useState(0);
 
@@ -18,7 +20,7 @@ export const LoadingScreen = () => {
 
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 2200);
+    }, 1800);
 
     return () => {
       clearTimeout(timer);
