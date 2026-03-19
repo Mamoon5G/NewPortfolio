@@ -276,12 +276,6 @@ export const Contact = memo(() => {
                     </motion.div>
                 </motion.div>
             </div>
-
-            <motion.div
-                className="absolute top-1/2 right-0 w-[600px] h-[600px] bg-primary/5 rounded-full blur-[150px]"
-                animate={{ scale: [1, 1.1, 1], opacity: [0.3, 0.5, 0.3] }}
-                transition={{ duration: 10, repeat: Infinity }}
-            />
         </section>
     );
 });

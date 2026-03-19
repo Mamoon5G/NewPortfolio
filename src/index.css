@@ -2,23 +2,23 @@
 
 @layer base {
   :root {
-    --bg: #0a0a12;
-    --fg: #e8e8f0;
-    --card-bg: #12121a;
-    --primary-color: #00d4ff;
-    --primary-fg: #0a0a12;
-    --secondary-bg: #1a1a28;
-    --secondary-fg: #00d4ff;
-    --muted-bg: #252535;
-    --muted-fg: #8888a0;
-    --border-color: #2a2a3d;
-    --highlight-color: #ff6b9d;
-    --surface-color: #181825;
-    --space-glow: #6366f1;
-    --nebula-purple: #8b5cf6;
-    --nebula-pink: #ec4899;
-    --star-white: #ffffff;
-    --cosmic-blue: #3b82f6;
+    --bg: #050505;
+    --fg: #e6e6ed;
+    --card-bg: #0b0b12;
+    --primary-color: #22d3ee;
+    --primary-fg: #020202;
+    --secondary-bg: #11111a;
+    --secondary-fg: #22d3ee;
+    --muted-bg: #1a1a24;
+    --muted-fg: #8f8fa3;
+    --border-color: #1f1f2d;
+    --highlight-color: #10b981;
+    --surface-color: #0e0e15;
+    --space-glow: #38bdf8;
+    --nebula-purple: #0ea5e9;
+    --nebula-pink: #14b8a6;
+    --star-white: #f8fafc;
+    --cosmic-blue: #0ea5e9;
   }
 
   :root.light {
@@ -78,11 +78,10 @@
   }
 
   :root:not(.light) body {
-    background: 
-      radial-gradient(ellipse at 20% 80%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
-      radial-gradient(ellipse at 80% 20%, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
-      radial-gradient(ellipse at 50% 50%, rgba(236, 72, 153, 0.05) 0%, transparent 60%),
-      var(--bg);
+    background:
+      radial-gradient(ellipse at 20% 80%, rgba(34, 211, 238, 0.08) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 20%, rgba(16, 185, 129, 0.06) 0%, transparent 50%),
+      linear-gradient(180deg, #050505 0%, #0b0b12 100%);
   }
 
   :root.light body {
@@ -94,16 +93,16 @@
   }
 
   * {
-    transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
+    transition: background-color 0.22s ease, border-color 0.22s ease, color 0.22s ease;
   }
 }
 
 @layer components {
   .glass {
-    background-color: color-mix(in srgb, var(--color-surface) 60%, transparent);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid color-mix(in srgb, var(--color-border) 40%, transparent);
+    background-color: color-mix(in srgb, var(--color-surface) 65%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid color-mix(in srgb, var(--color-border) 50%, transparent);
   }
   
   :root.light .glass {
@@ -115,10 +114,10 @@
   }
   
   .glass-strong {
-    background-color: color-mix(in srgb, var(--color-surface) 70%, transparent);
-    backdrop-filter: blur(30px);
-    -webkit-backdrop-filter: blur(30px);
-    border: 1px solid color-mix(in srgb, var(--color-border) 50%, transparent);
+    background-color: color-mix(in srgb, var(--color-surface) 78%, transparent);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border: 1px solid color-mix(in srgb, var(--color-border) 55%, transparent);
   }
   
   :root.light .glass-strong {
@@ -138,8 +137,8 @@
   
   .glow-border {
     box-shadow: 
-      0 0 30px color-mix(in srgb, var(--color-primary) 15%, transparent),
-      inset 0 0 30px color-mix(in srgb, var(--color-primary) 5%, transparent);
+      0 0 18px color-mix(in srgb, var(--color-primary) 14%, transparent),
+      inset 0 0 18px color-mix(in srgb, var(--color-primary) 6%, transparent);
   }
   
   :root.light .glow-border {
@@ -448,16 +447,39 @@
     -webkit-backdrop-filter: blur(20px);
     border: 1px solid color-mix(in srgb, var(--color-border) 30%, transparent);
     border-radius: 1rem;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease, background-color 0.22s ease;
+    position: relative;
+    overflow: hidden;
+    transform-style: preserve-3d;
+    box-shadow:
+      0 10px 30px -18px rgba(0,0,0,0.45),
+      0 1px 0 rgba(255,255,255,0.02);
   }
 
   .glass-card:hover {
-    background: color-mix(in srgb, var(--color-surface) 90%, transparent);
-    border-color: color-mix(in srgb, var(--color-primary) 40%, transparent);
-    transform: translateY(-5px);
+    background: color-mix(in srgb, var(--color-surface) 88%, transparent);
+    border-color: color-mix(in srgb, var(--color-primary) 30%, transparent);
+    transform: translateY(-3px) rotateX(2deg) rotateY(-2deg);
     box-shadow: 
-      0 20px 40px -15px color-mix(in srgb, var(--color-primary) 20%, transparent),
-      0 0 30px color-mix(in srgb, var(--color-primary) 10%, transparent);
+      0 16px 40px -16px color-mix(in srgb, var(--color-primary) 24%, transparent),
+      0 0 26px color-mix(in srgb, var(--color-primary) 10%, transparent);
+  }
+
+  .glass-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 20% 20%, color-mix(in srgb, var(--color-primary) 18%, transparent), transparent 45%),
+                linear-gradient(120deg, color-mix(in srgb, var(--color-primary) 10%, transparent), transparent 55%);
+    opacity: 0.4;
+    pointer-events: none;
+    transform: translateZ(8px);
+  }
+
+  @media (hover: hover) {
+    .glass-card:hover::after {
+      opacity: 0.6;
+    }
   }
 
   .cosmic-button {
@@ -469,6 +491,11 @@
     );
     overflow: hidden;
     z-index: 1;
+    box-shadow:
+      0 12px 26px -14px color-mix(in srgb, var(--color-primary) 35%, transparent),
+      inset 0 1px 0 rgba(255,255,255,0.06),
+      inset 0 -1px 0 rgba(0,0,0,0.35);
+    transform: translateZ(4px);
   }
 
   .cosmic-button::before {
@@ -487,6 +514,10 @@
 
   .cosmic-button:hover::before {
     opacity: 1;
+  }
+
+  .cosmic-button:hover {
+    transform: translateZ(6px) translateY(-1px);
   }
 }
 

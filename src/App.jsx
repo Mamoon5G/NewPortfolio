@@ -11,98 +11,161 @@ import { Contact } from "@/sections/Contact";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { CustomCursor } from "@/components/CustomCursor";
 import { LoadingScreen } from "@/components/LoadingScreen";
-// import { AnimatedBackground } from "@/components/AnimatedBackground";
-import { lazy, Suspense, useState, useEffect, useCallback, useMemo } from "react";
-import { useMotionValue, useSpring, useReducedMotion } from "framer-motion";
+import { AnimatedBackground } from "@/components/AnimatedBackground";
+
+import {
+  lazy,
+  Suspense,
+  useState,
+  useEffect,
+  useCallback,
+  useMemo,
+} from "react";
+
+import {
+  useMotionValue,
+  useSpring,
+  useReducedMotion,
+} from "framer-motion";
 
 const Hero3D = lazy(() => import("@/components/Hero3D"));
 
+/* =========================
+   HELPERS
+========================= */
+const getInitialTheme = () => {
+  if (typeof window === "undefined") return true;
+
+  const saved = localStorage.getItem("theme");
+  if (saved) return saved !== "light";
+
+  return window.matchMedia("(prefers-color-scheme: dark)").matches;
+};
+
 function App() {
   const prefersReducedMotion = useReducedMotion();
-  const [isDark, setIsDark] = useState(() => {
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme) return savedTheme !== 'light';
-    return window.matchMedia('(prefers-color-scheme: dark)').matches;
-  });
-  const [isMobile, setIsMobile] = useState(() => window.matchMedia('(max-width: 768px)').matches);
 
+  /* =========================
+     STATE
+  ========================= */
+  const [isDark, setIsDark] = useState(getInitialTheme);
+  const [isMobile, setIsMobile] = useState(false);
+
+  /* =========================
+     MOBILE DETECTION (optimized)
+  ========================= */
   useEffect(() => {
-    const handleResize = () => setIsMobile(window.matchMedia('(max-width: 768px)').matches);
-    handleResize();
-    window.addEventListener('resize', handleResize, { passive: true });
-    return () => window.removeEventListener('resize', handleResize);
+    const media = window.matchMedia("(max-width: 768px)");
+
+    const handleChange = () => setIsMobile(media.matches);
+    handleChange();
+
+    media.addEventListener("change", handleChange);
+    return () => media.removeEventListener("change", handleChange);
   }, []);
 
-  useEffect(() => {
-    if (isDark) {
-      document.documentElement.classList.remove('light');
-    } else {
-      document.documentElement.classList.add('light');
-    }
-  }, [isDark]);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollY = window.scrollY;
-      document.documentElement.style.setProperty('--scroll-y', `${scrollY}px`);
-    };
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
+  /* =========================
+     THEME TOGGLE (single source of truth)
+  ========================= */
   const toggleTheme = useCallback(() => {
-    setIsDark(prev => {
-      const newValue = !prev;
-      if (newValue) {
-        // newValue = true means dark mode
-        document.documentElement.classList.remove('light');
-        localStorage.setItem('theme', 'dark');
-      } else {
-        // newValue = false means light mode
-        document.documentElement.classList.add('light');
-        localStorage.setItem('theme', 'light');
-      }
-      return newValue;
+    setIsDark((prev) => {
+      const next = !prev;
+
+      document.documentElement.classList.toggle("light", !next);
+      localStorage.setItem("theme", next ? "dark" : "light");
+
+      return next;
     });
   }, []);
+
+  /* =========================
+     SCROLL OPTIMIZATION
+  ========================= */
+  useEffect(() => {
+    let ticking = false;
+
+    const handleScroll = () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          document.documentElement.style.setProperty(
+            "--scroll-y",
+            `${window.scrollY}px`
+          );
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  /* =========================
+     CURSOR (optimized)
+  ========================= */
+  const enableEffects = !isMobile && !prefersReducedMotion;
 
   const cursorX = useMotionValue(-100);
   const cursorY = useMotionValue(-100);
 
-  const springConfig = useMemo(() => ({ damping: 25, stiffness: 700 }), []);
+  const springConfig = useMemo(
+    () => ({ damping: 25, stiffness: 700 }),
+    []
+  );
+
   const cursorXSpring = useSpring(cursorX, springConfig);
   const cursorYSpring = useSpring(cursorY, springConfig);
 
-  const handleMouseMove = useCallback((e) => {
-    if (prefersReducedMotion || isMobile) return;
-    cursorX.set(e.clientX - 16);
-    cursorY.set(e.clientY - 16);
-  }, [cursorX, cursorY, prefersReducedMotion, isMobile]);
+  const CURSOR_SIZE = 32;
+
+  const handleMouseMove = useCallback(
+    (e) => {
+      if (!enableEffects) return;
+
+      cursorX.set(e.clientX - CURSOR_SIZE / 2);
+      cursorY.set(e.clientY - CURSOR_SIZE / 2);
+    },
+    [cursorX, cursorY, enableEffects]
+  );
 
   useEffect(() => {
-    if (prefersReducedMotion || isMobile) return undefined;
+    if (!enableEffects) return;
+
     window.addEventListener("mousemove", handleMouseMove);
     return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, [handleMouseMove, prefersReducedMotion, isMobile]);
+  }, [handleMouseMove, enableEffects]);
 
+  /* =========================
+     RENDER
+  ========================= */
   return (
     <div className="min-h-screen overflow-x-hidden">
-      <LoadingScreen skip={prefersReducedMotion || isMobile} />
-      {!isMobile && !prefersReducedMotion && (
-        <CustomCursor cursorXSpring={cursorXSpring} cursorYSpring={cursorYSpring} />
+      <LoadingScreen skip={!enableEffects} />
+
+      {enableEffects && (
+        <CustomCursor
+          cursorXSpring={cursorXSpring}
+          cursorYSpring={cursorYSpring}
+        />
       )}
-      {/* <AnimatedBackground isDark={isDark} /> */}
-      <ParticleField count={isMobile ? 900 : 1500} isLowPower={prefersReducedMotion || isMobile} />
+
+      {enableEffects && <AnimatedBackground isDark={isDark} />}
+      {enableEffects && <ParticleField />}
+
       <Navbar />
+
       <main>
         <div className="relative">
           <Hero />
-          {!isMobile && !prefersReducedMotion && (
-            <Suspense fallback={null}>
+
+          {enableEffects && (
+            <Suspense fallback={<div className="h-[300px]" />}>
               <Hero3D isDark={isDark} />
             </Suspense>
           )}
         </div>
+
         <About />
         <Skills />
         <Projects />
@@ -110,10 +173,12 @@ function App() {
         <Education />
         <Contact />
       </main>
+
       <Footer />
+
       <ThemeToggle isDark={isDark} toggle={toggleTheme} />
     </div>
-  )
+  );
 }
 
-export default App
+export default App;

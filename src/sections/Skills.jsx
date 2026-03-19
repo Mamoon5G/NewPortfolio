@@ -195,17 +195,6 @@ export const Skills = memo(() => {
 
                 <CodingProfiles />
             </div>
-
-            <motion.div
-                className="absolute top-1/4 left-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[150px]"
-                animate={{ y: [0, 30, 0], scale: [1, 1.1, 1] }}
-                transition={{ duration: 15, repeat: Infinity }}
-            />
-            <motion.div
-                className="absolute bottom-1/4 right-0 w-[400px] h-[400px] bg-nebula-purple/5 rounded-full blur-[120px]"
-                animate={{ y: [0, -30, 0], scale: [1, 1.15, 1] }}
-                transition={{ duration: 18, repeat: Infinity, delay: 3 }}
-            />
         </section>
     );
 });
