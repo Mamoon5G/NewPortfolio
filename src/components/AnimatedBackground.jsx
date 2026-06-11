@@ -146,7 +146,7 @@ export const AnimatedBackground = memo(({ isDark }) => {
   if (!isDark) {
     return (
       <div className="absolute inset-0 -z-20 overflow-hidden pointer-events-none">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(34,211,238,0.08),transparent_55%),linear-gradient(180deg,#030303,#09090f)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(16,185,129,0.05),transparent_55%),linear-gradient(180deg,#ffffff,#f8fafc)]" />
 
         <Nebula
           className="w-[500px] h-[500px]"
@@ -156,7 +156,7 @@ export const AnimatedBackground = memo(({ isDark }) => {
           duration={20}
           style={{
             background:
-              "radial-gradient(circle, rgba(34,211,238,0.08), transparent)",
+              "radial-gradient(circle, rgba(16,185,129,0.04), transparent)",
           }}
         />
       </div>
@@ -174,7 +174,7 @@ export const AnimatedBackground = memo(({ isDark }) => {
       style={{ perspective: 900 }}
     >
       {/* Background gradient */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(34,211,238,0.08),transparent_55%),linear-gradient(180deg,#030303,#09090f)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(244,63,94,0.06),transparent_55%),linear-gradient(180deg,#000000,#070708)]" />
 
       {/* Stars */}
       {stars.map((s) => (
@@ -190,7 +190,7 @@ export const AnimatedBackground = memo(({ isDark }) => {
         duration={18}
         style={{
           background:
-            "radial-gradient(circle, rgba(34,211,238,0.15), transparent)",
+            "radial-gradient(circle, rgba(244,63,94,0.08), transparent)",
         }}
       />
 

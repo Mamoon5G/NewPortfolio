@@ -34,11 +34,11 @@ export const Experience = () => {
             <ScrollReveal key={i} delay={i * 0.15}>
               <div className={`relative flex flex-col md:flex-row gap-6 md:gap-8 mb-10 md:mb-16 ${i % 2 === 1 ? 'md:flex-row-reverse' : ''}`}>
                 <div className="absolute left-4 md:left-1/2 w-3 h-3 rounded-full bg-primary -translate-x-1/2 mt-2 glow-border" />
-                <div className={`md:w-1/2 ${i % 2 === 0 ? 'md:pr-8 md:text-right' : 'md:pl-8'} pl-8 md:pl-0`}>
+                <div className={`md:w-1/2 ${i % 2 === 0 ? 'md:pr-6 md:text-right' : 'md:pl-6 md:text-left'} pl-8 md:pl-0`}>
                   <span className="text-xs md:text-sm font-mono text-primary">{exp.period}</span>
                 </div>
-                <div className={`md:w-1/2 ${i % 2 === 0 ? 'md:pl-8' : 'md:pr-8 md:text-right'} pl-8 md:pl-0`}>
-                  <div className="glass-card p-5 md:p-6 rounded-2xl">
+                <div className={`md:w-1/2 ${i % 2 === 0 ? 'md:pl-6' : 'md:pr-6'} pl-8 md:pl-0`}>
+                  <div className="glass-card p-5 md:p-5 rounded-2xl">
                     <h3 className="text-base md:text-lg font-semibold mb-1">{exp.title}</h3>
                     <p className="text-primary text-xs md:text-sm mb-2 md:mb-3">{exp.company}</p>
                     <p className="text-xs md:text-sm text-muted-foreground mb-3 md:mb-4">{exp.desc}</p>

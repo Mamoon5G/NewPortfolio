@@ -7,6 +7,26 @@ export const CustomCursor = memo(({ cursorXSpring, cursorYSpring }) => {
   const [isDark, setIsDark] = useState(true);
 
   useEffect(() => {
+    const handleMouseOver = (e) => {
+      const target = e.target;
+      if (!target) return;
+      
+      const isInteractive = 
+        target.tagName === 'A' || 
+        target.tagName === 'BUTTON' || 
+        target.closest('a') || 
+        target.closest('button') || 
+        target.closest('.cursor-pointer') || 
+        target.closest('.cosmic-button');
+        
+      setIsHovering(!!isInteractive);
+    };
+
+    window.addEventListener('mouseover', handleMouseOver);
+    return () => window.removeEventListener('mouseover', handleMouseOver);
+  }, []);
+
+  useEffect(() => {
     const checkTheme = () => {
       setIsDark(!document.documentElement.classList.contains('light'));
     };
@@ -35,76 +55,27 @@ export const CustomCursor = memo(({ cursorXSpring, cursorYSpring }) => {
     };
   }, [handleMouseDown, handleMouseUp]);
 
-  const primaryColor = isDark ? "#00d4ff" : "#0891b2";
-  const secondaryColor = isDark ? "#ec4899" : "#f59e0b";
-  const tertiaryColor = isDark ? "#8b5cf6" : "#6366f1";
+  const primaryColor = isDark ? "#f43f5e" : "#10b981";
+  const secondaryColor = isDark ? "#fb7185" : "#34d399";
+  const tertiaryColor = isDark ? "#fda4af" : "#a7f3d0";
 
   return (
     <>
       <motion.div
-        className="fixed top-0 left-0 pointer-events-none z-[9999] hidden md:block mix-blend-difference"
+        className="fixed top-0 left-0 pointer-events-none z-[9999] hidden md:block"
         style={{
           translateX: cursorXSpring,
           translateY: cursorYSpring,
         }}
         animate={{
-          scale: isClicking ? 0.8 : isHovering ? 1.8 : 1,
-          borderColor: isHovering ? secondaryColor : primaryColor,
+          scale: isClicking ? 0.8 : isHovering ? 2 : 1,
         }}
         transition={{ duration: 0.15, ease: "easeOut" }}
       >
-        <svg 
-          width="48" 
-          height="48" 
-          viewBox="0 0 48 48" 
-          fill="none"
-          className="transform -translate-x-1/2 -translate-y-1/2"
-        >
-          <circle
-            cx="24"
-            cy="24"
-            r="20"
-            stroke={isHovering ? secondaryColor : primaryColor}
-            strokeWidth="2"
-            fill="none"
-            strokeDasharray="4 4"
-          />
-          <circle
-            cx="24"
-            cy="24"
-            r="16"
-            stroke={isHovering ? secondaryColor : primaryColor}
-            strokeWidth="1"
-            fill="none"
-            opacity="0.5"
-          />
-          {isHovering && (
-            <>
-              <motion.circle
-                cx="24"
-                cy="24"
-                r="12"
-                stroke={tertiaryColor}
-                strokeWidth="2"
-                fill="none"
-                initial={{ scale: 0, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                exit={{ scale: 0, opacity: 0 }}
-              />
-              <motion.circle
-                cx="24"
-                cy="24"
-                r="8"
-                stroke={secondaryColor}
-                strokeWidth="1"
-                fill="none"
-                initial={{ scale: 0, opacity: 0 }}
-                animate={{ scale: 1, opacity: 0.7 }}
-                transition={{ delay: 0.05 }}
-              />
-            </>
-          )}
-        </svg>
+        <div 
+          className="w-10 h-10 rounded-full border border-primary/50 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+          style={{ borderColor: isHovering ? secondaryColor : primaryColor }}
+        />
       </motion.div>
 
       <motion.div
@@ -114,37 +85,13 @@ export const CustomCursor = memo(({ cursorXSpring, cursorYSpring }) => {
           translateY: cursorYSpring,
         }}
         animate={{
-          scale: isClicking ? 1.5 : isHovering ? 2.5 : 1,
+          scale: isClicking ? 1.5 : isHovering ? 0 : 1,
           backgroundColor: isHovering ? secondaryColor : primaryColor,
-          boxShadow: isHovering 
-            ? `0 0 20px ${secondaryColor}, 0 0 40px ${secondaryColor}40`
-            : `0 0 10px ${primaryColor}40`,
         }}
         transition={{ duration: 0.1, ease: "easeOut" }}
       >
-        <div className="w-2 h-2 rounded-full" />
+        <div className="w-2 h-2 rounded-full absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2" style={{ backgroundColor: primaryColor }} />
       </motion.div>
-
-      {isHovering && (
-        <motion.div
-          className="fixed top-0 left-0 pointer-events-none z-[9998] hidden md:block"
-          style={{
-            translateX: cursorXSpring,
-            translateY: cursorYSpring,
-          }}
-          initial={{ opacity: 0, scale: 0 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0 }}
-        >
-          <div 
-            className="w-4 h-4 rounded-full animate-ping"
-            style={{ 
-              backgroundColor: isHovering ? secondaryColor : primaryColor,
-              animationDuration: '2s',
-            }}
-          />
-        </motion.div>
-      )}
     </>
   );
 });

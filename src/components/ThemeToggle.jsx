@@ -1,4 +1,4 @@
-import { Moon, Sun, Sparkles } from "lucide-react";
+import { Moon, Sun } from "lucide-react";
 import { motion } from "framer-motion";
 
 export const ThemeToggle = ({ isDark, toggle }) => {
@@ -37,19 +37,6 @@ export const ThemeToggle = ({ isDark, toggle }) => {
                     <Sun className="w-5 h-5 md:w-6 md:h-6 text-highlight" />
                 </motion.div>
             </div>
-            
-            {isDark && (
-                <motion.div
-                    className="absolute -top-1 -right-1"
-                    animate={{ 
-                        scale: [1, 1.2, 1],
-                        opacity: [0.5, 1, 0.5]
-                    }}
-                    transition={{ duration: 2, repeat: Infinity }}
-                >
-                    <Sparkles className="w-3 h-3 text-primary" />
-                </motion.div>
-            )}
         </motion.button>
     );
 };

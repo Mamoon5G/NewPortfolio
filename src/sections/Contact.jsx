@@ -13,10 +13,10 @@ const containerVariants = {
 
 const itemVariants = {
     hidden: { opacity: 0, y: 40 },
-    visible: { 
-        opacity: 1, 
-        y: 0, 
-        transition: { duration: 0.7, ease: [0.4, 0, 0.2, 1] } 
+    visible: {
+        opacity: 1,
+        y: 0,
+        transition: { duration: 0.7, ease: [0.4, 0, 0.2, 1] }
     }
 }
 
@@ -32,14 +32,14 @@ const contactInfo = [
         icon: Linkedin,
         label: "LinkedIn",
         value: "Mamoon Siddiqui",
-        href: "https://www.linkedin.com/in/mamoon-siddiqui-5g",
+        href: "https://www.linkedin.com/in/mamoon-siddiquii",
         color: "#0077b5",
     },
     {
         icon: Github,
         label: "GitHub",
-        value: "mamoon-5g",
-        href: "https://github.com/mamoon-5g",
+        value: "Mamoon5G",
+        href: "https://github.com/Mamoon5G",
         color: "#8b5cf6",
     },
     {
@@ -77,12 +77,12 @@ export const Contact = memo(() => {
     const handleSubmit = useCallback(async (e) => {
         e.preventDefault();
         setIsSubmitting(true);
-        
+
         await new Promise(resolve => setTimeout(resolve, 1500));
-        
+
         const mailtoLink = `mailto:siddiquimamoon2004ms@gmail.com?subject=Portfolio Contact: ${formData.name}&body=${encodeURIComponent(`Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`)}`;
         window.open(mailtoLink, '_blank');
-        
+
         setFormData({ name: '', email: '', message: '' });
         setIsSubmitting(false);
     }, [formData]);
@@ -109,7 +109,7 @@ export const Contact = memo(() => {
                         I'm always open to discussing new projects, creative ideas, or opportunities to be part of your visions. Feel free to reach out!
                     </motion.p>
                 </motion.div>
-                
+
                 <motion.div
                     initial="hidden"
                     whileInView="visible"
@@ -143,7 +143,7 @@ export const Contact = memo(() => {
                                     />
                                 </motion.div>
                             </div>
-                            
+
                             <div className="space-y-2">
                                 <label htmlFor="email" className="block text-sm font-medium text-foreground">
                                     Email
@@ -168,7 +168,7 @@ export const Contact = memo(() => {
                                     />
                                 </motion.div>
                             </div>
-                            
+
                             <div className="space-y-2">
                                 <label htmlFor="message" className="block text-sm font-medium text-foreground">
                                     Message
@@ -193,11 +193,11 @@ export const Contact = memo(() => {
                                     />
                                 </motion.div>
                             </div>
-                            
+
                             <motion.button
                                 type="submit"
                                 disabled={isSubmitting}
-                                className="w-full cosmic-button text-primary-foreground px-6 py-4 rounded-xl font-medium shadow-lg shadow-primary/25 transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer group disabled:opacity-70"
+                                className="w-full cosmic-button text-primary-foreground px-6 py-4 rounded-xl font-medium shadow-sm shadow-primary/15 transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer group disabled:opacity-70"
                                 whileHover={{ scale: 1.02 }}
                                 whileTap={{ scale: 0.98 }}
                             >
@@ -224,10 +224,10 @@ export const Contact = memo(() => {
                                 Whether you have a question, want to collaborate, or just want to say hello, feel free to get in touch. I'm always excited to hear about new opportunities!
                             </p>
                         </div>
-                        
+
                         <div className="space-y-4">
                             {contactInfo.map((item, index) => (
-                                <motion.a 
+                                <motion.a
                                     key={index}
                                     href={item.href || undefined}
                                     target={item.href ? "_blank" : undefined}
@@ -235,7 +235,7 @@ export const Contact = memo(() => {
                                     className={`flex items-center gap-4 glass-card p-4 group min-w-0 ${!item.href ? 'cursor-default' : ''}`}
                                     whileHover={item.href ? { scale: 1.02, x: 5 } : {}}
                                 >
-                                    <motion.div 
+                                    <motion.div
                                         className="p-3 rounded-xl"
                                         style={{ backgroundColor: `${item.color}15` }}
                                         whileHover={{ scale: 1.1, backgroundColor: `${item.color}25` }}

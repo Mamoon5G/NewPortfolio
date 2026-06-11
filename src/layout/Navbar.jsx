@@ -1,5 +1,5 @@
 import { Button } from "@/components/Button"
-import { Menu, X, Sparkles } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { useEffect, useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -62,13 +62,6 @@ export const Navbar = () => {
                         whileHover={{ scale: 1.05 }}
                     >
                         Mamoon Siddiqui <span className="text-primary">.</span>
-                        <motion.span
-                            className="absolute -top-1 -right-2"
-                            animate={{ rotate: [0, 10, -10, 0] }}
-                            transition={{ duration: 2, repeat: Infinity }}
-                        >
-                            <Sparkles className="w-3 h-3 text-primary" />
-                        </motion.span>
                     </motion.a>
 
                     <div className="hidden lg:flex items-center">

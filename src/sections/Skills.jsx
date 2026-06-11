@@ -32,7 +32,7 @@ const skillCategories = [
         skills: [
             { name: "Git / GitHub", level: 82 },
             { name: "VS Code", level: 86 },
-            { name: "Vite / Webpack", level: 78 },
+            { name: "Antigravity / Claude Code / Open Code", level: 85 },
             { name: "Chrome DevTools", level: 80 },
         ]
     },
@@ -47,11 +47,11 @@ const containerVariants = {
 }
 
 const itemVariants = {
-    hidden: { opacity: 0, y: 40 },
+    hidden: { opacity: 0, y: 20 },
     visible: {
         opacity: 1,
         y: 0,
-        transition: { duration: 0.7, ease: [0.4, 0, 0.2, 1] }
+        transition: { duration: 0.4, ease: "easeOut" }
     }
 }
 
@@ -80,7 +80,7 @@ const SkillBar = memo(({ skill, color, index }) => (
     </motion.div>
 ));
 
-const SkillCard = memo(({ category }) => {
+const SkillCard = memo(({ category, index }) => {
     const IconComponent = category.icon;
 
     return (
@@ -116,51 +116,14 @@ const SkillCard = memo(({ category }) => {
 
 
 const codingProfiles = [
-    { name: "LeetCode", handle: "mamoon-5g", href: "https://leetcode.com/u/mamoon-5g", color: "#f59e0b" },
-    { name: "GitHub", handle: "mamoon-5g", href: "https://github.com/mamoon-5g", color: "#8b5cf6" },
-    { name: "LinkedIn", handle: "mamoon-siddiqui-5g", href: "https://linkedin.com/in/mamoon-siddiqui-5g", color: "#0077b5" },
+    { name: "LeetCode", handle: "Mamoon5G", href: "https://leetcode.com/u/Mamoon5G", color: "#f59e0b", stat: "150+", statLabel: "Solved" },
+    { name: "GitHub", handle: "Mamoon5G", href: "https://github.com/Mamoon5G", color: "#8b5cf6", stat: "30+", statLabel: "Repos" },
+    { name: "LinkedIn", handle: "mamoon-siddiquii", href: "https://linkedin.com/in/mamoon-siddiquii", color: "#0077b5", stat: "200+", statLabel: "Connects" },
 ];
-
-const CodingProfiles = memo(() => (
-    <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6 }}
-        className="mt-8"
-    >
-        <h3 className="text-xl font-bold text-secondary-foreground mb-6 text-center">Coding Profiles</h3>
-        <div className="grid sm:grid-cols-3 gap-4">
-            {codingProfiles.map((profile, i) => (
-                <motion.a
-                    key={i}
-                    href={profile.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="glass-card p-5 flex items-center gap-4 group"
-                    whileHover={{ y: -4, scale: 1.02 }}
-                    transition={{ duration: 0.2 }}
-                >
-                    <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style={{ backgroundColor: `${profile.color}20` }}>
-                        <span className="text-sm font-bold" style={{ color: profile.color }}>{profile.name[0]}</span>
-                    </div>
-                    <div className="flex-1 min-w-0">
-                        <div className="font-semibold text-foreground group-hover:text-primary transition-colors truncate">{profile.name}</div>
-                        <div className="text-xs text-muted-foreground truncate">@{profile.handle}</div>
-                    </div>
-                    <div className="text-right shrink-0">
-                        <div className="text-lg font-bold" style={{ color: profile.color }}>{profile.stat}</div>
-                        <div className="text-xs text-muted-foreground">{profile.statLabel}</div>
-                    </div>
-                </motion.a>
-            ))}
-        </div>
-    </motion.div>
-));
 
 export const Skills = memo(() => {
     return (
-        <section id="skills" className="py-32 relative overflow-hidden">
+        <section id="skills" className="py-16 md:py-32 relative overflow-hidden">
             <div className="container mx-auto px-6 relative z-10">
                 <motion.div
                     initial="hidden"
@@ -174,26 +137,79 @@ export const Skills = memo(() => {
                         Tech Stack
                     </motion.span>
                     <motion.h2 variants={itemVariants} className="text-4xl md:text-5xl lg:text-6xl font-bold text-secondary-foreground mb-6">
-                        Skills & <span className="cosmic-text-gradient">Expertise</span>
+                        Skills & <span className="text-primary">Expertise</span>
                     </motion.h2>
                     <motion.p variants={itemVariants} className="text-muted-foreground text-lg">
                         Here are the technologies and tools I work with to bring ideas to life.
                     </motion.p>
                 </motion.div>
 
-                <motion.div
-                    variants={containerVariants}
-                    initial="hidden"
-                    whileInView="visible"
-                    viewport={{ once: true, margin: "-50px" }}
-                    className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16"
-                >
-                    {skillCategories.map((category, index) => (
-                        <SkillCard key={index} category={category} index={index} />
-                    ))}
-                </motion.div>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    {/* Frontend - Large Block */}
+                    <div className="md:col-span-2">
+                        <SkillCard category={skillCategories[0]} index={0} />
+                    </div>
+                    {/* LeetCode - Small Block */}
+                    <motion.a
+                        href={codingProfiles[0].href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="glass-card p-8 flex flex-col justify-center items-center text-center group"
+                        whileHover={{ y: -4 }}
+                    >
+                        <div className="w-16 h-16 rounded-2xl flex items-center justify-center mb-6" style={{ backgroundColor: `${codingProfiles[0].color}15` }}>
+                            <span className="text-2xl font-bold" style={{ color: codingProfiles[0].color }}>L</span>
+                        </div>
+                        <h4 className="text-xl font-bold mb-1">{codingProfiles[0].name}</h4>
+                        <p className="text-sm text-muted-foreground mb-4">@{codingProfiles[0].handle}</p>
+                        <div className="text-3xl font-bold" style={{ color: codingProfiles[0].color }}>{codingProfiles[0].stat}</div>
+                        <div className="text-xs text-muted-foreground uppercase tracking-wider">{codingProfiles[0].statLabel}</div>
+                    </motion.a>
 
-                <CodingProfiles />
+                    {/* GitHub - Small Block */}
+                    <motion.a
+                        href={codingProfiles[1].href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="glass-card p-8 flex flex-col justify-center items-center text-center group order-last md:order-none"
+                        whileHover={{ y: -4 }}
+                    >
+                        <div className="w-16 h-16 rounded-2xl flex items-center justify-center mb-6" style={{ backgroundColor: `${codingProfiles[1].color}15` }}>
+                            <span className="text-2xl font-bold" style={{ color: codingProfiles[1].color }}>G</span>
+                        </div>
+                        <h4 className="text-xl font-bold mb-1">{codingProfiles[1].name}</h4>
+                        <p className="text-sm text-muted-foreground mb-4">@{codingProfiles[1].handle}</p>
+                        <div className="text-3xl font-bold" style={{ color: codingProfiles[1].color }}>{codingProfiles[1].stat}</div>
+                        <div className="text-xs text-muted-foreground uppercase tracking-wider">{codingProfiles[1].statLabel}</div>
+                    </motion.a>
+
+                    {/* Backend - Large Block */}
+                    <div className="md:col-span-2">
+                        <SkillCard category={skillCategories[1]} index={1} />
+                    </div>
+
+                    {/* Tools - Large Block */}
+                    <div className="md:col-span-2">
+                        <SkillCard category={skillCategories[2]} index={2} />
+                    </div>
+
+                    {/* LinkedIn - Small Block */}
+                    <motion.a
+                        href={codingProfiles[2].href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="glass-card p-8 flex flex-col justify-center items-center text-center group"
+                        whileHover={{ y: -4 }}
+                    >
+                        <div className="w-16 h-16 rounded-2xl flex items-center justify-center mb-6" style={{ backgroundColor: `${codingProfiles[2].color}15` }}>
+                            <span className="text-2xl font-bold" style={{ color: codingProfiles[2].color }}>In</span>
+                        </div>
+                        <h4 className="text-xl font-bold mb-1">{codingProfiles[2].name}</h4>
+                        <p className="text-sm text-muted-foreground mb-4">@{codingProfiles[2].handle}</p>
+                        <div className="text-3xl font-bold" style={{ color: codingProfiles[2].color }}>{codingProfiles[2].stat}</div>
+                        <div className="text-xs text-muted-foreground uppercase tracking-wider">{codingProfiles[2].statLabel}</div>
+                    </motion.a>
+                </div>
             </div>
         </section>
     );

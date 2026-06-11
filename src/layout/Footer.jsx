@@ -11,11 +11,11 @@ const navLinks = [
 ];
 
 const socialLinks = [
-    { icon: Github, href: "https://github.com/mamoon-5g", label: "GitHub" },
-    { icon: Linkedin, href: "https://linkedin.com/in/mamoon-siddiqui-5g", label: "LinkedIn" },
-    { icon: Instagram, href: "https://instagram.com/m_a__siddiqui_5g_", label: "Instagram" },
+    { icon: Github, href: "https://github.com/Mamoon5G", label: "GitHub" },
+    { icon: Linkedin, href: "https://linkedin.com/in/mamoon-siddiquii", label: "LinkedIn" },
+    { icon: Instagram, href: "https://instagram.com/m_a_siddiqui_5g", label: "Instagram" },
     { icon: Twitter, href: "https://twitter.com/mamoon_4g", label: "Twitter" },
-    { icon: Code2, href: "https://leetcode.com/u/mamoon-5g", label: "LeetCode" }
+    { icon: Code2, href: "https://leetcode.com/u/Mamoon5G", label: "LeetCode" }
 ]
 
 export const Footer = () => {

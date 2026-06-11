@@ -48,7 +48,7 @@ const Planet = memo(({ position, radius, color, rotationSpeed, hasRing, ringColo
   );
 });
 
-const FloatingParticle = memo(({ position, size, speed }) => {
+const FloatingParticle = memo(({ position, size, speed, color }) => {
   const meshRef = useRef();
   
   useFrame((state) => {
@@ -62,8 +62,8 @@ const FloatingParticle = memo(({ position, size, speed }) => {
     <mesh ref={meshRef} position={position}>
       <octahedronGeometry args={[size, 0]} />
       <meshStandardMaterial
-        color="#00d4ff"
-        emissive="#00d4ff"
+        color={color}
+        emissive={color}
         emissiveIntensity={0.5}
         transparent
         opacity={0.8}
@@ -147,7 +147,7 @@ const Asteroid = memo(({ position, scale, rotationAxis }) => {
   );
 });
 
-const SpaceDust = memo(({ count }) => {
+const SpaceDust = memo(({ count, color }) => {
   const points = useMemo(() => {
     const positions = new Float32Array(count * 3);
     for (let i = 0; i < count * 3; i += 3) {
@@ -179,7 +179,7 @@ const SpaceDust = memo(({ count }) => {
       </bufferGeometry>
       <pointsMaterial
         size={0.02}
-        color="#00d4ff"
+        color={color}
         transparent
         opacity={0.6}
         sizeAttenuation
@@ -190,12 +190,15 @@ const SpaceDust = memo(({ count }) => {
 
 const Scene = memo(({ isDark }) => {
   const isMobile = useIsMobile();
+  const mainColor = isDark ? "#f43f5e" : "#10b981";
+  const dimColor = isDark ? "#be123c" : "#059669";
+  const lightColor = isDark ? "#fb7185" : "#34d399";
 
   if (!isDark) {
     return (
       <>
         <ambientLight intensity={0.5} />
-        <pointLight position={[10, 10, 10]} intensity={1} color="#0891b2" />
+        <pointLight position={[10, 10, 10]} intensity={1} color={mainColor} />
         <pointLight position={[-10, -10, -10]} intensity={0.3} color="#f59e0b" />
         <Stars radius={100} depth={50} count={1000} factor={4} saturation={0} fade speed={1} />
       </>
@@ -205,46 +208,46 @@ const Scene = memo(({ isDark }) => {
   return (
     <>
       <ambientLight intensity={0.3} />
-      <pointLight position={[10, 10, 10]} intensity={1.5} color="#00d4ff" />
-      <pointLight position={[-10, -10, -10]} intensity={0.8} color="#ec4899" />
-      <pointLight position={[0, 5, 5]} intensity={0.5} color="#8b5cf6" />
-      <spotLight position={[0, 10, 0]} angle={0.3} penumbra={1} intensity={0.3} color="#00d4ff" />
+      <pointLight position={[10, 10, 10]} intensity={1.5} color={mainColor} />
+      <pointLight position={[-10, -10, -10]} intensity={0.8} color={dimColor} />
+      <pointLight position={[0, 5, 5]} intensity={0.5} color={lightColor} />
+      <spotLight position={[0, 10, 0]} angle={0.3} penumbra={1} intensity={0.3} color={mainColor} />
 
       <Stars radius={100} depth={50} count={2000} factor={4} saturation={0} fade speed={1} />
 
       {!isMobile && (
         <>
-          <NebulaOrb position={[-3, 1, -2]} scale={0.5} color="#00d4ff" />
-          <NebulaOrb position={[3, -1, -1]} scale={0.4} color="#8b5cf6" />
-          <NebulaOrb position={[2, 2, -3]} scale={0.3} color="#ec4899" />
-          <NebulaOrb position={[-2, -2, -2]} scale={0.35} color="#3b82f6" />
+          <NebulaOrb position={[-3, 1, -2]} scale={0.5} color={mainColor} />
+          <NebulaOrb position={[3, -1, -1]} scale={0.4} color={dimColor} />
+          <NebulaOrb position={[2, 2, -3]} scale={0.3} color={lightColor} />
+          <NebulaOrb position={[-2, -2, -2]} scale={0.35} color={dimColor} />
           
-          <CosmicRing radius={2} tubeRadius={0.02} rotation={[0.5, 0.3, 0]} color="#00d4ff" />
-          <CosmicRing radius={2.5} tubeRadius={0.015} rotation={[1, 0.5, 0.3]} color="#8b5cf6" />
-          <CosmicRing radius={3} tubeRadius={0.01} rotation={[2, 1, 0.5]} color="#ec4899" />
+          <CosmicRing radius={2} tubeRadius={0.02} rotation={[0.5, 0.3, 0]} color={mainColor} />
+          <CosmicRing radius={2.5} tubeRadius={0.015} rotation={[1, 0.5, 0.3]} color={dimColor} />
+          <CosmicRing radius={3} tubeRadius={0.01} rotation={[2, 1, 0.5]} color={lightColor} />
 
-          <Planet position={[-4, 0, -3]} radius={0.4} color="#00d4ff" rotationSpeed={0.005} hasRing={true} ringColor="#00d4ff" />
-          <Planet position={[4, 1, -2]} radius={0.3} color="#ec4899" rotationSpeed={0.008} hasRing={false} />
-          <Planet position={[0, -3, -4]} radius={0.5} color="#8b5cf6" rotationSpeed={0.003} hasRing={true} ringColor="#8b5cf6" />
+          <Planet position={[-4, 0, -3]} radius={0.4} color={mainColor} rotationSpeed={0.005} hasRing={true} ringColor={mainColor} />
+          <Planet position={[4, 1, -2]} radius={0.3} color={dimColor} rotationSpeed={0.008} hasRing={false} />
+          <Planet position={[0, -3, -4]} radius={0.5} color={lightColor} rotationSpeed={0.003} hasRing={true} ringColor={lightColor} />
 
-          <FloatingParticle position={[-2, 3, -2]} size={0.1} speed={0.02} />
-          <FloatingParticle position={[3, 2, -1]} size={0.08} speed={0.025} />
-          <FloatingParticle position={[1, -2, -3]} size={0.12} speed={0.015} />
-          <FloatingParticle position={[-3, -1, -2]} size={0.06} speed={0.03} />
-          <FloatingParticle position={[2, 0, -4]} size={0.09} speed={0.018} />
+          <FloatingParticle position={[-2, 3, -2]} size={0.1} speed={0.02} color={mainColor} />
+          <FloatingParticle position={[3, 2, -1]} size={0.08} speed={0.025} color={dimColor} />
+          <FloatingParticle position={[1, -2, -3]} size={0.12} speed={0.015} color={lightColor} />
+          <FloatingParticle position={[-3, -1, -2]} size={0.06} speed={0.03} color={mainColor} />
+          <FloatingParticle position={[2, 0, -4]} size={0.09} speed={0.018} color={dimColor} />
 
           <Asteroid position={[-1, -4, -3]} scale={0.5} rotationAxis="x" />
           <Asteroid position={[2, 3, -2]} scale={0.4} rotationAxis="y" />
           <Asteroid position={[-3, 2, -4]} scale={0.6} rotationAxis="z" />
 
-          <SpaceDust count={500} />
+          <SpaceDust count={500} color={mainColor} />
         </>
       )}
 
       <mesh position={[0, -5, -8]} rotation={[-Math.PI / 2, 0, 0]}>
         <planeGeometry args={[30, 30, 32, 32]} />
         <meshStandardMaterial
-          color="#00d4ff"
+          color={mainColor}
           wireframe
           transparent
           opacity={0.05}
@@ -254,28 +257,33 @@ const Scene = memo(({ isDark }) => {
   );
 });
 
-const FallbackCanvas = memo(({ isDark }) => (
-  <div className="absolute inset-0 -z-10 overflow-hidden">
-    <div className="absolute inset-0 bg-linear-to-br from-primary/5 via-transparent to-nebula-purple/5" />
-    <div 
-      className="absolute w-64 h-64 rounded-full blur-[100px] animate-pulse"
-      style={{ 
-        background: isDark ? 'radial-gradient(circle, rgba(0,212,255,0.2) 0%, transparent 70%)' : 'radial-gradient(circle, rgba(8,145,178,0.1) 0%, transparent 70%)',
-        top: '20%',
-        left: '10%',
-      }}
-    />
-    <div 
-      className="absolute w-96 h-96 rounded-full blur-[150px] animate-pulse"
-      style={{ 
-        background: isDark ? 'radial-gradient(circle, rgba(139,92,246,0.15) 0%, transparent 70%)' : 'transparent',
-        bottom: '10%',
-        right: '10%',
-        animationDelay: '2s',
-      }}
-    />
-  </div>
-));
+const FallbackCanvas = memo(({ isDark }) => {
+  const mainGlowColor = isDark ? "rgba(244,63,94,0.15)" : "rgba(16,185,129,0.06)";
+  const secondGlowColor = isDark ? "rgba(244,63,94,0.08)" : "transparent";
+  
+  return (
+    <div className="absolute inset-0 -z-10 overflow-hidden">
+      <div className="absolute inset-0 bg-linear-to-br from-primary/5 via-transparent to-primary/2" />
+      <div 
+        className="absolute w-64 h-64 rounded-full blur-[100px] animate-pulse"
+        style={{ 
+          background: `radial-gradient(circle, ${mainGlowColor} 0%, transparent 70%)`,
+          top: '20%',
+          left: '10%',
+        }}
+      />
+      <div 
+        className="absolute w-96 h-96 rounded-full blur-[150px] animate-pulse"
+        style={{ 
+          background: `radial-gradient(circle, ${secondGlowColor} 0%, transparent 70%)`,
+          bottom: '10%',
+          right: '10%',
+          animationDelay: '2s',
+        }}
+      />
+    </div>
+  );
+});
 
 export const Hero3D = memo(({ isDark }) => {
   const canvasRef = useRef(null);

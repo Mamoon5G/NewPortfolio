@@ -12,7 +12,7 @@ export const Button = ({
     const sizeClasses = {
         sm: "px-5 py-2.5 text-sm",
         default: "px-6 py-3 text-base",
-        lg: "px-8 py-4 text-lg"
+        lg: "px-6 py-3 text-lg"
     };
 
     const variantClasses = {

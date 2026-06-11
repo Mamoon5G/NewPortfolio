@@ -1,4 +1,3 @@
-import { ParticleField } from "@/components/ParticleField";
 import { Navbar } from "@/layout/Navbar";
 import { Footer } from "@/layout/Footer";
 import { Hero } from "@/sections/Hero";
@@ -11,11 +10,8 @@ import { Contact } from "@/sections/Contact";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { CustomCursor } from "@/components/CustomCursor";
 import { LoadingScreen } from "@/components/LoadingScreen";
-import { AnimatedBackground } from "@/components/AnimatedBackground";
 
 import {
-  lazy,
-  Suspense,
   useState,
   useEffect,
   useCallback,
@@ -27,8 +23,6 @@ import {
   useSpring,
   useReducedMotion,
 } from "framer-motion";
-
-const Hero3D = lazy(() => import("@/components/Hero3D"));
 
 /* =========================
    HELPERS
@@ -117,7 +111,7 @@ function App() {
   const cursorXSpring = useSpring(cursorX, springConfig);
   const cursorYSpring = useSpring(cursorY, springConfig);
 
-  const CURSOR_SIZE = 32;
+  const CURSOR_SIZE = 0; // Handled visually by Absolute placement inside CustomCursor
 
   const handleMouseMove = useCallback(
     (e) => {
@@ -150,20 +144,11 @@ function App() {
         />
       )}
 
-      {enableEffects && <AnimatedBackground isDark={isDark} />}
-      {enableEffects && <ParticleField />}
-
       <Navbar />
 
       <main>
         <div className="relative">
           <Hero />
-
-          {enableEffects && (
-            <Suspense fallback={<div className="h-[300px]" />}>
-              <Hero3D isDark={isDark} />
-            </Suspense>
-          )}
         </div>
 
         <About />
